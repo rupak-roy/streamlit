@@ -1,4 +1,4 @@
-# streamlit - Machine Learning Full Version Classification App.
+# Streamlit ~ Machine Learning Classification App. - Full Version
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://streamlit-roy.herokuapp.com/)
 
