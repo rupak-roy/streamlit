@@ -1,2 +1,2 @@
 $ python -V
-Python 3.9.0
+python 3.9.0
