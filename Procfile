@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run SemiAutoMLapp.py
+web: sh setup.sh && streamlit run ML.py
