@@ -1,2 +1,2 @@
-$ python -V
+$ cat runtime.txt
 Python 3.9.0
