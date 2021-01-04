@@ -108,7 +108,6 @@ sphinxcontrib-serializinghtml==1.1.4
 srsly==1.0.5
 streamlit==0.73.1
 sumy==0.8.1
-tensorflow==2.3.0
 termcolor==1.1.0
 terminado==0.9.1
 testpath==0.4.4
