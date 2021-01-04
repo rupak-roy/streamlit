@@ -1,8 +1,6 @@
 # streamlit
 
-<a href=https://streamlit-roy.herokuapp.com/">
-  <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-</a>
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://streamlit-roy.herokuapp.com/)
 
 #Full Version ML Classifier App. Any suggestion or collaborative work to make it better open source version. Most Welcome and i love too!
 
