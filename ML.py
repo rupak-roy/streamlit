@@ -61,7 +61,7 @@ def main():
     """Auto-Machine Learning App with Streamlit """
     
     st.title("Auto-Machine Learning Data Analytics Kit - full version")
-    st.text( "Using STreamlit ==0.66+ upload data and enjoy ")
+    st.text( "10 Powerful classifiers with STreamlit upload data and enjoy ")
     st.write("""
              Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) in csv by Bob.
              """)
