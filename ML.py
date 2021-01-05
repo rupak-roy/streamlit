@@ -60,10 +60,10 @@ def make_downloadable(data):
 def main():
     """Auto-Machine Learning App with Streamlit """
     
-    st.title("Auto-Machine Learning Data Analytics Kit - full version")
+    st.title("Auto-Machine Learning Data Analytics Kit .v1 - full version")
     st.text( "10 Powerful classifiers with STreamlit, upload data and enjoy ")
     st.write("""
-             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) in csv by Bob.
+             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V2 update: GridSearch 
              """)
     st.text("~ Currently accepting smaller files due to Heroku free storage limit, will be transfered to streamlit platform soon ")
   
