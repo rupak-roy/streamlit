@@ -58,14 +58,15 @@ def make_downloadable(data):
     st.markdown(href, unsafe_allow_html=True)
 
 def main():
-    """Auto Machine Learning app with Streamlit """
+    """Auto-Machine Learning App with Streamlit """
     
-    st.title("Machine Learning Classifier App")
+    st.title("Auto-Machine Learning Data Analytics Kit - full version")
     st.text( "Using STreamlit ==0.66+ upload data and enjoy ")
-    st.text("~ Currently accepting comma seperated file")
     st.write("""
              Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) in csv by Bob.
              """)
+    st.text("~ Currently accepting smaller files due to Heroku free storage limit, will be transfered to streamlit platform soon ")
+  
     st.text("Ignore:EmptyDataError: No columns to parse from file have no effect on analysis,This is indentation Error will be fixed in next update")
    
     activities = ["EDA","Plots","Model Building","About"]
