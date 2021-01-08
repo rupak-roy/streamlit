@@ -30,7 +30,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
-
+from sklearn.model_selection import GridSearchCV
 #disable warning message
 st.set_option('deprecation.showfileUploaderEncoding', False)
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -504,24 +504,35 @@ def main():
             if classifier=='SVM: with Paramter Tuning':
                  svm_o1, svm_o2 = st.beta_columns(2)
                  with svm_o1:
-                    svm_gamma = st.select_slider("Select Gamma ",options=["scale","auto"],value=("scale"),key='0svm34')
-                    st.write("Kernel Gamma:",svm_gamma)
-                    
-                    svm_c = st.slider("Select Regularization parameter",0.1,9.9,1.0,key='0svmk33')
+                    svm_gamma = st.select_slider("Select Gamma(gamma) ",options=["scale","auto"],value=("scale"),key='0svm34')
+                    st.write("Kernel Gamma:",svm_gamma) 
+                    svm_c = st.slider("Select Regularization parameter (c)",0.1,9.9,1.0,key='0svmk33')
                     st.write("Default: 1.0")
-                    
                     svm_iter = st.slider("Select Iterations",1,1000,-1,key='0svmk33')
                     st.write("Default: -1 = No limit")
                     
                  with svm_o2:
-                    svm_types = st.select_slider("Select Criterion ",options=["poly","rbf","sigmoid","linear"],value=("sigmoid"),key='0svm34')
-                    st.write("Kernel Type:",svm_types)
-                    
+                    svm_types = st.select_slider("Select Criterion(kernel type) ",options=["poly","rbf","sigmoid","linear"],value=("sigmoid"),key='0svm34')
+                    st.write("Kernel Type:",svm_types) 
                     svm_degree = st.slider("Select degree for poly kernel(Ignored by all other Kernels)",2,8,3,key='0svmk33')
                     st.write("Default: 3")
-                 
+           
                  ksvm_model2=SVC(kernel = svm_types,gamma=svm_gamma,C=svm_c,max_iter = svm_iter,degree=svm_degree,random_state = 0)
-                 ksvm_model2.fit(X_train, y_train)
+                 ksvm_model2.fit(X_train, y_train)                 
+                 if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
+                     st.text(" Searching the Best Optimal Parameters, this will take few mins.")
+                     st.text("If click please wait until the process is complete else refresh the page")
+                     parameters = [{'C': [1, 10, 100, 1000], 'kernel': ['linear']},
+                                   {'C': [1, 10, 100, 1000], 'kernel': ['rbf'], 'gamma': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}]
+                     grid_search = GridSearchCV(estimator = ksvm_model2,param_grid = parameters,scoring = 'accuracy',cv = 10)
+                     grid_search = grid_search.fit(X_train, y_train)
+                     best_accuracy = grid_search.best_score_
+                     best_parameters = grid_search.best_params_
+                     st.write("The Best setting will give-",(best_accuracy))
+                     st.write(best_parameters)
+                     st.info("Re-run the model with the settings above")  
+                 else:
+                     pass                                                                 
                  acc = ksvm_model2.score(X_test, y_test)
                  st.write('Accuracy: ', acc)
                  ksvm_pred2 = ksvm_model2.predict(X_test)
@@ -631,14 +642,14 @@ def main():
     
         if st.sidebar.checkbox("Predict"):
             data = st.file_uploader("Upload your data you want to predict",type = ["csv","txt"])
-        if data is not None:
-            df_temp = pd.read_csv(data,sep=',')
-            df_temp = df_temp.dropna()
-            st.success("Removed Missing Values")
-            st.dataframe(df_temp.head())
-            st.info("Mapping the number of the variables from the model")
-            st.write("Found columns", len(trans_df.columns))
-            
+            if data is not None:
+                df_temp = pd.read_csv(data,sep=',')
+                df_temp = df_temp.dropna()
+                st.success("Removed Missing Values")
+                st.dataframe(df_temp.head())
+                st.info("Mapping the number of the variables from the model")
+                st.write("Found columns", len(trans_df.columns))
+                
             fr_new_columns = trans_df.columns.to_list()
                #st.write(all_columns)
             trans_newdf = df_temp[fr_new_columns]
@@ -688,13 +699,11 @@ def main():
                 #getting the column name as list
                 y_names = y_col.values.tolist()
                 #st.write(y_names)
-
                 #again convert to pandas Dataframe else throw numpy error
                 results2=pd.DataFrame(results)
                 #renaming/labeling the Y column          
                 results2.columns=y_names
                 #st.write(results2)
-       
                 #series not applicable columna as name s = pd.Series(results2)
                 p_results = pd.concat([inv_df2,results2],axis=1)
                 #working:p_results = pd.concat([inv_df2,s],axis=1)
