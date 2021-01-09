@@ -388,32 +388,63 @@ def main():
             classifier = st.selectbox('Which algorithm?', algo)
             
             if classifier=='Decision Tree: Rule-Based Prediction':
-                dt_model = DecisionTreeClassifier(criterion = 'entropy', random_state = 0)
-                dt_model.fit(X_train, y_train)
-                acc = dt_model.score(X_test, y_test)
-                st.write('Accuracy: ', acc)
+                 dt_o1, dt_o2 = st.beta_columns(2)
+                 with dt_o1:
+                    dt_max_feat = st.select_slider("Select Features to consider when looking for the best split:",options=["auto","sqrt","log","None"],value="auto",key='0svm34')
+                    st.write("Default: None =  max_features=n_features.") 
+                    dt_max_depth = st.slider("The Maximum depth of the tree",3,1000,500,key='0dtt33')
+                    st.write("Default Max Limit =500")
+                    dt_min_sam_split = st.slider("Minimum number of samples required to split",2,10,2,key='0dttt133')
+                    st.write("Default(min_samples_split)= 2, Taken:",dt_min_sam_split )
+                  
+                 with dt_o2:
+                    dt_types = st.select_slider("Select Criterion( split type) ",options=["gini","entropy"],value=("gini"),key='0svm34')
+                    st.write("Split Type:",dt_types) 
+                    dt_min_impurity_split = st.slider("Impurity Split:Threshold for early stopping in tree growth.",0,5,0,key='0svmk33')
+                    st.write("Default(min_impurity_split)= 0")
+                    dt_min_sam_leaf = st.slider("Minimum number of sampels required to be a leaf node",1,10,1,key='0svmk33')
+                    st.write("Default(min_samples_leaf)= 1, Taken:",dt_min_sam_leaf)
+                    
+                 dt_model = DecisionTreeClassifier(criterion = dt_types,max_depth=dt_max_depth, min_samples_split=dt_min_sam_split, min_impurity_split=dt_min_impurity_split, min_samples_leaf=dt_min_sam_leaf, random_state = 0)
+                 dt_model.fit(X_train, y_train)
+                 if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
+                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate 10times")
+                     st.text("If clicked please wait until the process is complete else refresh the page")
+                     parameters = [{'max_depth':[10, 100, 500, 1000], 'criterion': ['gini'],'min_samples_split':[1,2,3,4,5,6,7,8,9,10],'min_samples_leaf':[1,2,3,4,5],'min_impurity_decrease':[0,1,2,3,4,5]},
+                                   {'max_depth':[10, 100, 500, 1000], 'criterion': ['entropy'],'min_samples_split':[1,2,3,4,5,6,7,8,9,10],'min_samples_leaf':[1,2,3,4,5],'min_impurity_decrease':[0,1,2,3,4,5]}]
+                     grid_search = GridSearchCV(estimator = dt_model,param_grid = parameters,scoring = 'accuracy',cv =10)
+                     grid_search = grid_search.fit(X_train, y_train)
+                     best_accuracy = grid_search.best_score_
+                     best_parameters = grid_search.best_params_
+                     st.write("The Best setting will give approx.-",(best_accuracy))
+                     st.write(best_parameters)
+                     st.info("Re-run the model with the settings above")  
+                 else:
+                     pass
+                 acc = dt_model.score(X_test, y_test)
+                 st.write('Accuracy: ', acc)
+                 
+                 y_pred_dt = dt_model.predict(X_test)
+                 cm=confusion_matrix(y_test,y_pred_dt)
+                 st.write('Confusion matrix: ', cm)
                 
-                y_pred_dt = dt_model.predict(X_test)
-                cm=confusion_matrix(y_test,y_pred_dt)
-                st.write('Confusion matrix: ', cm)
-                
-                # get importance
-                importance = dt_model.feature_importances_
-                st.info("Index column:Feature Numbers , Index Values:Score")
-                st.write(importance)
+                 # get importance
+                 importance = dt_model.feature_importances_
+                 st.info("Index column:Feature Numbers , Index Values:Score")
+                 st.write(importance)
                 # plot feature importance
-                st.success("Important Features Plot")
-                plt.bar([x for x in range(len(importance))], importance)
-                st.pyplot()
-                from sklearn.tree import export_text
-                st.info("Rules/Conditions used for prediction ")
-                col_names_dt=trans_df1.columns.tolist()
-                tree_rules = export_text(dt_model, feature_names=col_names_dt)
-                st.write(tree_rules)
-                st.info("Visualizing The Tree might be restricted due to HTML length & Width: will be updating soon")
-                st.info("")
-                st.success("")
-                st.warning("")
+                 st.success("Important Features Plot")
+                 plt.bar([x for x in range(len(importance))], importance)
+                 st.pyplot()
+                 from sklearn.tree import export_text
+                 st.info("Rules/Conditions used for prediction ")
+                 col_names_dt=trans_df1.columns.tolist()
+                 tree_rules = export_text(dt_model, feature_names=col_names_dt)
+                 st.write(tree_rules)
+                 st.info("Visualizing The Tree might be restricted due to HTML length & Width: will be updating soon")
+                 st.info("")
+                 st.success("")
+                 st.warning("")
                 
             if classifier=='Random Forest: Ensemble Method':
                  rf1, rf2 = st.beta_columns(2)
@@ -506,7 +537,7 @@ def main():
                  with svm_o1:
                     svm_gamma = st.select_slider("Select Gamma(gamma) ",options=["scale","auto"],value=("scale"),key='0svm34')
                     st.write("Kernel Gamma:",svm_gamma) 
-                    svm_c = st.slider("Select Regularization parameter (c)",0.1,9.9,1.0,key='0svmk33')
+                    svm_c = st.slider("Select Regularization parameter (C)",100,1000,1,key='0svmk33')
                     st.write("Default: 1.0")
                     svm_iter = st.slider("Select Iterations",1,1000,-1,key='0svmk33')
                     st.write("Default: -1 = No limit")
@@ -520,11 +551,11 @@ def main():
                  ksvm_model2=SVC(kernel = svm_types,gamma=svm_gamma,C=svm_c,max_iter = svm_iter,degree=svm_degree,random_state = 0)
                  ksvm_model2.fit(X_train, y_train)                 
                  if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
-                     st.text(" Searching the Best Optimal Parameters, this will take few mins.")
-                     st.text("If click please wait until the process is complete else refresh the page")
+                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate 3times")
+                     st.text("If clicked please wait until the process is complete else refresh the page")
                      parameters = [{'C': [1, 10, 100, 1000], 'kernel': ['linear']},
                                    {'C': [1, 10, 100, 1000], 'kernel': ['rbf'], 'gamma': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}]
-                     grid_search = GridSearchCV(estimator = ksvm_model2,param_grid = parameters,scoring = 'accuracy',cv = 10)
+                     grid_search = GridSearchCV(estimator = ksvm_model2,param_grid = parameters,scoring = 'accuracy',cv = 3)
                      grid_search = grid_search.fit(X_train, y_train)
                      best_accuracy = grid_search.best_score_
                      best_parameters = grid_search.best_params_
@@ -574,37 +605,68 @@ def main():
                 
                 
             if classifier == 'Logistic Regression':
-                lr_model= LogisticRegression(random_state = 0)
-                lr_model.fit(X_train, y_train)
-                acc = lr_model.score(X_test, y_test)
-                st.write('Accuracy: ', acc)
-                pred_lr = lr_model.predict(X_test)
-                cm=confusion_matrix(y_test,pred_lr)
-                st.write('Confusion matrix: ', cm)
-
-                # get importance
-                importance = lr_model.coef_[0]
-                st.info("Index column:Feature Numbers , Index Values:Score")
-                st.write(importance)
-                # plot feature importance
-                st.success("Important Features Plot")
-                plt.bar([x for x in range(len(importance))], importance)
-                st.pyplot()
-                st.info("")
-                st.success("")
-                st.warning("")
-            
-                with st.beta_expander("Download The Model"):
-                #if we wish to save 
-                    #lr_model.save_weights('StackedLSTM.h5')
-                    #save the model in the disk
-                    import pickle
-                    # save the model to disk
-                    filename = 'lr_class_model.sav'
-                    d=pickle.dump(lr_model, open(filename, 'wb'))
+                 lg_o1, lg_o2 = st.beta_columns(2)
+                 with lg_o1:
+                    lg_penalty = st.select_slider("Select Penalty) ",options=["l1","l2","elasticnet",'None'],value=("l2"),key='0svm34')
+                    st.write("Penalty Parameter:",lg_penalty) 
+                    lg_c = st.slider("Iverse of Regularization strength (C)",1,1000,1,key='0lr33')
+                    st.write("Default: 1")
+                    lg_iter = st.slider("Select Iterations",1,2000,100,key='0svmk33')
+                    st.write("Default: 100")
                     
-                    href = f'<a href="data:file/txt" download="d">Click here!</a>'
-                    st.markdown(href, unsafe_allow_html=True)
+                 with lg_o2:
+                    lg_multi_class = st.select_slider("Select Multi Class) ",options=["auto","ovr","multinomial"],value=("auto"),key='0svm34')
+                    st.write("Multi Class Type:",lg_multi_class) 
+                    lg_intercept_scal = st.slider("Select Intercept Scaling",0,5,1,key='0svmk33')
+                    st.write("Default: 1")
+                    
+                 lr_model= LogisticRegression(penalty=lg_penalty,C=lg_c, max_iter=lg_iter, intercept_scaling=lg_intercept_scal, multi_class=lg_multi_class, random_state = 0)
+                 lr_model.fit(X_train, y_train)
+                 if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
+                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate as much as possible")
+                     st.text("If clicked please wait until the process is complete else refresh the page")
+                     parameters = [{'C': [1, 10, 100,300,700, 1000,2000], 'penalty': ['l2'],'max_iter':[100,200,400,600,800,1000],'multi_class':['auto'],'intercept_scaling':[0,1,2,3,4,5]},
+                                   {'C': [1, 10, 100,300,700, 1000,2000], 'penalty': ['l2'],'max_iter':[100,200,400,600,800,1000],'multi_class':['multinomial'],'intercept_scaling':[0,1,2,3,4,5]},
+                                   {'C': [1, 10, 100,300,700, 1000,2000], 'penalty': ['l2'],'max_iter':[100,200,400,600,800,1000],'multi_class':['ovr'],'intercept_scaling':[0,1,2,3,4,5]}]
+                     grid_search = GridSearchCV(estimator = lr_model,param_grid = parameters,scoring = 'accuracy',cv = 10)
+                     grid_search = grid_search.fit(X_train, y_train)
+                     best_accuracy = grid_search.best_score_
+                     best_parameters = grid_search.best_params_
+                     st.write("The Best setting will give approx.",(best_accuracy))
+                     st.write(best_parameters)
+                     st.info("Re-run the model with the settings above")  
+                 else:
+                     pass                                                      
+                 
+                 acc = lr_model.score(X_test, y_test)
+                 st.write('Accuracy: ', acc)
+                 pred_lr = lr_model.predict(X_test)
+                 cm=confusion_matrix(y_test,pred_lr)
+                 st.write('Confusion matrix: ', cm)
+
+                 # get importance
+                 importance = lr_model.coef_[0]
+                 st.info("Index column:Feature Numbers , Index Values:Score")
+                 st.write(importance)
+                 # plot feature importance
+                 st.success("Important Features Plot")
+                 plt.bar([x for x in range(len(importance))], importance)
+                 st.pyplot()
+                 st.info("")
+                 st.success("")
+                 st.warning("")
+            
+                 with st.beta_expander("Download The Model"):
+                     #if we wish to save 
+                     #lr_model.save_weights('StackedLSTM.h5')
+                     #save the model in the disk
+                     import pickle
+                     # save the model to disk
+                     filename = 'lr_class_model.sav'
+                     d=pickle.dump(lr_model, open(filename, 'wb'))
+                
+                     href = f'<a href="data:file/txt" download="d">Click here!</a>'
+                     st.markdown(href, unsafe_allow_html=True)
                 
             if classifier == 'eXtreme Gradient Boosting(XGBoost)':
                  xg_o1, xg_o2 = st.beta_columns(2)
