@@ -63,7 +63,7 @@ def main():
     st.title("Auto-Machine Learning Data Analytics Kit .v1 - full version")
     st.text( "10 Powerful classifiers with STreamlit, upload data and enjoy ")
     st.write("""
-             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V2 updated: GridSearch added
+             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V3 update: Deep Learning coming soon.
              """)
     st.text("~ Currently accepting smaller files due to Heroku free storage limit,thus computationally expensive tasks might fail and will restart the app, will be transfered to streamlit platform soon ")
   
