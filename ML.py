@@ -416,7 +416,7 @@ def main():
                      grid_search = grid_search.fit(X_train, y_train)
                      best_accuracy = grid_search.best_score_
                      best_parameters = grid_search.best_params_
-                     st.write("The Best setting will give approx.-",(best_accuracy))
+                     st.write("The Best setting's score",(best_accuracy))
                      st.write(best_parameters)
                      st.info("Re-run the model with the settings above")  
                  else:
@@ -519,7 +519,7 @@ def main():
                      best_accuracy = grid_search.best_score_
                      best_parameters = grid_search.best_params_
                     
-                     st.write("The Best setting will give approx.",(best_accuracy))
+                     st.write("The Best setting's score",(best_accuracy))
                      st.write(best_parameters)
                      st.info("Re-run the model with the settings above")  
                  else:
@@ -590,7 +590,7 @@ def main():
                  ksvm_model2=SVC(kernel = svm_types,gamma=svm_gamma,C=svm_c,max_iter = svm_iter,degree=svm_degree,random_state = 0)
                  ksvm_model2.fit(X_train, y_train)                 
                  if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
-                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate 3times")
+                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate 3times. However the results are biased and cannot gurantee exact accuracy due to randomised data structure pattern by GridSearch vs SVM Classifier")
                      st.text("If clicked please wait until the process is complete else refresh the page")
                      parameters = [{'C': [1, 10, 100, 1000], 'kernel': ['linear']},
                                    {'C': [1, 10, 100, 1000], 'kernel': ['rbf'], 'gamma': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}]
@@ -598,7 +598,7 @@ def main():
                      grid_search = grid_search.fit(X_train, y_train)
                      best_accuracy = grid_search.best_score_
                      best_parameters = grid_search.best_params_
-                     st.write("The Best setting will give-",(best_accuracy))
+                     st.write("The Best setting's score-",(best_accuracy))
                      st.write(best_parameters)
                      st.info("Re-run the model with the settings above")  
                  else:
@@ -680,7 +680,7 @@ def main():
                      grid_search = grid_search.fit(X_train, y_train)
                      best_accuracy = grid_search.best_score_
                      best_parameters = grid_search.best_params_
-                     st.write("The Best setting will give approx.",(best_accuracy))
+                     st.write("The Best setting's score",(best_accuracy))
                      st.write(best_parameters)
                      st.info("Re-run the model with the settings above")  
                  else:
