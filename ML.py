@@ -63,9 +63,9 @@ def main():
     st.title("Auto-Machine Learning Data Analytics Kit .v1 - full version")
     st.text( "10 Powerful classifiers with STreamlit, upload data and enjoy ")
     st.write("""
-             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V2 update: GridSearch 
+             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V2 updated: GridSearch added
              """)
-    st.text("~ Currently accepting smaller files due to Heroku free storage limit, will be transfered to streamlit platform soon ")
+    st.text("~ Currently accepting smaller files due to Heroku free storage limit,thus computationally expensive tasks might fail and will restart the app, will be transfered to streamlit platform soon ")
   
     st.text("Ignore:EmptyDataError: No columns to parse from file have no effect on analysis,This is indentation Error will be fixed in next update")
    
@@ -390,10 +390,10 @@ def main():
             if classifier=='Decision Tree: Rule-Based Prediction':
                  dt_o1, dt_o2 = st.beta_columns(2)
                  with dt_o1:
-                    dt_max_feat = st.select_slider("Select Features to consider when looking for the best split:",options=["auto","sqrt","log","None"],value="auto",key='0svm34')
+                    dt_max_feat = st.select_slider("Select Features to consider when looking for the best split:",options=["auto","sqrt","log2","None"],value="auto",key='0svm34')
                     st.write("Default: None =  max_features=n_features.") 
                     dt_max_depth = st.slider("The Maximum depth of the tree",3,1000,500,key='0dtt33')
-                    st.write("Default Max Limit =500")
+                    st.write("Default Max Limit =500 Taken:",dt_max_depth)
                     dt_min_sam_split = st.slider("Minimum number of samples required to split",2,10,2,key='0dttt133')
                     st.write("Default(min_samples_split)= 2, Taken:",dt_min_sam_split )
                   
@@ -401,14 +401,14 @@ def main():
                     dt_types = st.select_slider("Select Criterion( split type) ",options=["gini","entropy"],value=("gini"),key='0svm34')
                     st.write("Split Type:",dt_types) 
                     dt_min_impurity_split = st.slider("Impurity Split:Threshold for early stopping in tree growth.",0,5,0,key='0svmk33')
-                    st.write("Default(min_impurity_split)= 0")
+                    st.write("Default(min_impurity_split)= 0 Taken", dt_min_impurity_split)
                     dt_min_sam_leaf = st.slider("Minimum number of sampels required to be a leaf node",1,10,1,key='0svmk33')
                     st.write("Default(min_samples_leaf)= 1, Taken:",dt_min_sam_leaf)
                     
                  dt_model = DecisionTreeClassifier(criterion = dt_types,max_depth=dt_max_depth, min_samples_split=dt_min_sam_split, min_impurity_split=dt_min_impurity_split, min_samples_leaf=dt_min_sam_leaf, random_state = 0)
                  dt_model.fit(X_train, y_train)
                  if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
-                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate 10times")
+                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate 10times.However the results are biased and cannot gurantee exact accuracy due to randomised data structure pattern by GridSearch vs Decision Tree Classifier")
                      st.text("If clicked please wait until the process is complete else refresh the page")
                      parameters = [{'max_depth':[10, 100, 500, 1000], 'criterion': ['gini'],'min_samples_split':[1,2,3,4,5,6,7,8,9,10],'min_samples_leaf':[1,2,3,4,5],'min_impurity_decrease':[0,1,2,3,4,5]},
                                    {'max_depth':[10, 100, 500, 1000], 'criterion': ['entropy'],'min_samples_split':[1,2,3,4,5,6,7,8,9,10],'min_samples_leaf':[1,2,3,4,5],'min_impurity_decrease':[0,1,2,3,4,5]}]
@@ -450,11 +450,26 @@ def main():
                  rf1, rf2 = st.beta_columns(2)
                  with rf1:
                     rf_n = st.slider("Select n_estimators/Tree",400,1500,500,key='0rf33')
-                    st.write("Default: 500 Trees")
+                    st.write("Default: 500 Trees. Taken:", rf_n)
+                    rf_min_sam_split = st.slider("Minimum number of samples required to split",2,10,2,key='0dttt133')
+                    st.write("Default(min_samples_split)= 2, Taken:",rf_min_sam_split )
+                    rf_max_feat = st.select_slider("Select Features to consider when looking for the best split:",options=["auto","sqrt","log2"],value="auto",key='0svm34')
+                    st.write("Default: auto= sqrt(n_features) Taken:",rf_max_feat) 
+                    
                  with rf2:
                     rf_p = st.select_slider("Select Criterion ",options=["entropy","gini"],value=("entropy"),key='0rf34')
                     st.write("Splitting Criteria:",rf_p)
-                 rf_model = RandomForestClassifier(n_estimators = rf_n, criterion = rf_p, random_state = 0)
+                    rf_min_sam_leaf = st.slider("Minimum number of samples required to be a leaf node",1,10,1,key='0svmk33')
+                    st.write("Default(min_samples_leaf)= 1, Taken:",rf_min_sam_leaf)
+                    rf_min_impurity_split = st.slider("Impurity Split:Threshold for early stopping in tree growth.",0,5,0,key='0svmk33')
+                    st.write("Default(min_impurity_split)= 0 Taken:",rf_min_impurity_split)
+                    rf_oob = st.select_slider("Use out-of-bag samples to estimate the generalization accuracy?",options=["True","False"],value=("False"),key='0rf34')
+                    st.write("Splitting Criteria:",rf_oob)
+                    
+                    
+                 rf_model = RandomForestClassifier(n_estimators = rf_n, criterion = rf_p,min_samples_split=rf_min_sam_split, max_features=rf_max_feat,
+                                                   min_samples_leaf=rf_min_sam_leaf, min_impurity_split=rf_min_impurity_split, 
+                                                   oob_score=rf_oob, random_state = 0)
                  rf_model.fit(X_train, y_train)
                  acc = rf_model.score(X_test, y_test)
                  st.write('Accuracy: ', acc)
@@ -474,18 +489,42 @@ def main():
                  st.info("")
                  st.success("")
                  st.warning("")
-            
-            
+                        
             if classifier=='K-Nearest Neighbor(KNN)':
                  knn1, knn2 = st.beta_columns(2)
                  with knn1:
-                    k_n = st.slider("Select N_neighbors",3,10,5,key='0k33')
-                    st.write("Default metric: Minkowski")
+                    k_n = st.slider("Select N_neighbors",3,30,5,key='0k33')
+                    st.write("N_neighbots (Default=5) Taken",k_n)
+                    k_algo = st.select_slider("Algorithm used to compute the nearest neighbors:",options=["auto","ball_tree","kd_tree","brute"],value=("auto"),key='0rf34')
+                    st.write("Default(algorithm):Auto, Taken",k_algo) 
+                    
                  with knn2:
-                    K_p = st.slider("Select Distance metrics: 1 is equivalent to the Manhattan distance and 2 is equivalent to the Euclidean distance ",1,2,2,key='0k34')
-                                
-                 knn_model = KNeighborsClassifier(n_neighbors = k_n, metric = 'minkowski', p = K_p)
+                    k_p = st.slider("Select Distance metrics: 1 is equivalent to the Manhattan distance and 2 is equivalent to the Euclidean distance ",1,2,2,key='0k34')
+                    k_leaf = st.slider("Leaf size passed to BallTree or KDTree. This can affect the speed of the construction and query",10,70,30,key='0k33')
+                    st.write("Default(leaf_size):30 Taken:",k_leaf)
+                    k_weight = st.select_slider("Select weight method for all points in each neighborhood",options=["uniform","distance"],value=("uniform"),key='0rf34')
+                    st.write("Default(weights):Auto, Taken:",k_weight)
+                                     
+                 knn_model = KNeighborsClassifier(n_neighbors = k_n,weights=k_weight, p = k_p, algorithm=k_algo, leaf_size=k_leaf)
                  knn_model.fit(X_train, y_train)
+                 
+                 if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
+                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate several times. However the results are biased and cannot gurantee exact accuracy due to randomised data structure pattern taken by GridSearch vs KNN-Classifier")
+                     st.text("If clicked please wait until the process is complete else refresh the page")
+                     clf= KNeighborsClassifier()
+  
+                     parameters1 = [{'n_neighbors': [3, 5, 10,15,20,25], 'algorithm': ['auto','ball_tree','kd_tree','brute'],'leaf_size':[20,30,40,50,60,70,80,90]}]
+                     grid_search = GridSearchCV(estimator =clf,param_grid = parameters1,scoring = 'accuracy',cv=2)
+                     grid_search = grid_search.fit(X_train, y_train)
+                     best_accuracy = grid_search.best_score_
+                     best_parameters = grid_search.best_params_
+                    
+                     st.write("The Best setting will give approx.",(best_accuracy))
+                     st.write(best_parameters)
+                     st.info("Re-run the model with the settings above")  
+                 else:
+                     pass                     
+                                  
                  acc = knn_model.score(X_test, y_test)
                  st.write('Accuracy: ', acc)
                     # Predicting the Test set results
@@ -591,17 +630,26 @@ def main():
                 st.warning("")
 
             if classifier == 'Linear Discriminant Analysis(LDA)':
-                lda_model=LinearDiscriminantAnalysis()
-                lda_model.fit(X_train, y_train)
-                acc = lda_model.score(X_test, y_test)
-                st.write('Accuracy: ', acc)
-                lda_pred = lda_model.predict(X_test)
-                cm=confusion_matrix(y_test,lda_pred)
-                st.write('Confusion matrix: ', cm)
-                st.error("Try another Algorithm for Feature importance")
-                st.info("")
-                st.success("")
-                st.warning("")                          
+                 lda_o1, lda_o2 = st.beta_columns(2)
+                 with lda_o1:
+                    lda_solver = st.select_slider("Select Solver to use ",options=["svd","lsqr","eigen"],value=("svd"),key='0svm34')
+                    st.write("Default(solver): svd Taken:",lda_solver) 
+                    
+                # with lda_o2:
+                 #   lda_sh = st.select_slider("Select Shrinkage ",options=["auto","float","None"],value=("None"),key='0svm34')
+                  #  st.write("Default=shrinkage Taken:",lda_sh) 
+
+                 lda_model=LinearDiscriminantAnalysis(solver=lda_solver)
+                 lda_model.fit(X_train, y_train)
+                 acc = lda_model.score(X_test, y_test)
+                 st.write('Accuracy: ', acc)
+                 lda_pred = lda_model.predict(X_test)
+                 cm=confusion_matrix(y_test,lda_pred)
+                 st.write('Confusion matrix: ', cm)
+                 st.error("Try another Algorithm for Feature importance")
+                 st.info("")
+                 st.success("")
+                 st.warning("")                          
                 
                 
             if classifier == 'Logistic Regression':
@@ -623,7 +671,7 @@ def main():
                  lr_model= LogisticRegression(penalty=lg_penalty,C=lg_c, max_iter=lg_iter, intercept_scaling=lg_intercept_scal, multi_class=lg_multi_class, random_state = 0)
                  lr_model.fit(X_train, y_train)
                  if st.checkbox("Automate Best Optimal Parameters using Grid Search?"):
-                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate as much as possible")
+                     st.text(" Searching the Best Optimal Parameters,this will take few mins. as we crossvalidate as much as possible. However the results are biased and cannot gurantee exact accuracy due to randomised data structure pattern by GridSearch vs Logistic Regression")
                      st.text("If clicked please wait until the process is complete else refresh the page")
                      parameters = [{'C': [1, 10, 100,300,700, 1000,2000], 'penalty': ['l2'],'max_iter':[100,200,400,600,800,1000],'multi_class':['auto'],'intercept_scaling':[0,1,2,3,4,5]},
                                    {'C': [1, 10, 100,300,700, 1000,2000], 'penalty': ['l2'],'max_iter':[100,200,400,600,800,1000],'multi_class':['multinomial'],'intercept_scaling':[0,1,2,3,4,5]},
