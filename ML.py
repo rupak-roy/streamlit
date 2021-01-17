@@ -62,11 +62,9 @@ def main():
     
     st.title("Auto-Machine Learning Data Analytics Kit .v1 - full version")
     st.text( "10 Powerful classifiers with STreamlit, upload data and enjoy ")
-    st.write("""
-             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V3 update: Deep Learning module at https://share.streamlit.io/rupak-roy/streamlit_deeplearning_analytics/main/ML.py.
-             """)
+
+    st.write("Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) V3 update: Deep Learning module at [@share.streamlit.io] (https://share.streamlit.io/rupak-roy/streamlit_deeplearning_analytics/main/ML.py)")
     st.write("NLP Analytics [@share.streamlit.io rupak-roy/nlp](https://share.streamlit.io/rupak-roy/nlp/main/nlp_app.py)  Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) ")
-    st.write("V3 update: Deep Learning module at [@share.streamlit.io] (https://share.streamlit.io/rupak-roy/streamlit_deeplearning_analytics/main/ML.py)")
                  
              
     st.text("~ Currently accepting smaller files due to Heroku free storage limit,thus computationally expensive tasks might fail and will restart the app, will be transfered to streamlit platform soon ")
