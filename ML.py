@@ -65,6 +65,10 @@ def main():
     st.write("""
              Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V3 update: Deep Learning module at https://share.streamlit.io/rupak-roy/streamlit_deeplearning_analytics/main/ML.py.
              """)
+    st.write("NLP Analytics [@share.streamlit.io rupak-roy/nlp](https://share.streamlit.io/rupak-roy/nlp/main/nlp_app.py)  Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) ")
+    st.write("V3 update: Deep Learning module at [@share.streamlit.io rupak-roy/streamlit_deeplearning_analytics] (https://share.streamlit.io/rupak-roy/streamlit_deeplearning_analytics/main/ML.py)")
+                 
+             
     st.text("~ Currently accepting smaller files due to Heroku free storage limit,thus computationally expensive tasks might fail and will restart the app, will be transfered to streamlit platform soon ")
   
     st.text("Ignore:EmptyDataError: No columns to parse from file have no effect on analysis,This is indentation Error will be fixed in next update")
