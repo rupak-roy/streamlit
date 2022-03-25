@@ -1202,11 +1202,11 @@ Hi I’m Bob aka. Rupak Roy. Things i write about frequently on Quora & Linkedin
 I formerly Co-founded various Ai based projects to inspire and nurture the human spirit with the Ai training on how to leverage on how to leverage Ai to solve problems for an exponential growth. IF you need such app just ping, happy to help.
 
 My Career Contour consists of various technologies starting from Masters of Science in Information Technology to Commerce with the privilege to be Wiley certified in various Analytical Domain.
-My alternative internet presences, Facebook, Blogger, Linkedin, Medium, Instagram, ISSUU and with Data2Dimensions
+My alternative internet presences, Facebook, Blogger, Linkedin, Medium, Instagram, ISSUU
 
 If you wish to learn more about Data Science follow me at:
 
-~ Medium [@rupak.roy](https://medium.com/@rupak.roy)
+~ Medium [@rupak.roy](https://medium.com/@bobrupakroy)
 
 ~ Linkedin [@bobrupak](https://www.linkedin.com/in/bobrupak/)
 
