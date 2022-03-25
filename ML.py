@@ -35,6 +35,9 @@ from sklearn.model_selection import GridSearchCV
 st.set_option('deprecation.showfileUploaderEncoding', False)
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
+
+from deep_learning import run_deep_learning
+
 import pickle
 
 import base64
@@ -62,16 +65,16 @@ def main():
     
     st.title("Auto-Machine Learning Data Analytics Kit .v1 - full version")
     st.text( "10 Powerful classifiers with STreamlit, upload data and enjoy ")
-
-    st.write("Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) V3 update: Deep Learning module at [@share.streamlit.io] (https://share.streamlit.io/rupak-roy/streamlit_deeplearning_analytics/main/ML.py)")
-    st.write("NLP Analytics [@share.streamlit.io rupak-roy/nlp](https://share.streamlit.io/rupak-roy/nlp/main/nlp_app.py)")
-                 
-             
+    st.write("""
+             Sample Dataset [@rupak-roy Github](https://github.com/rupak-roy/dataset-streamlit) . V3 update: Deep Learning LSTM added.
+             """)
+    st.write("NLP Analytics [@share.streamlit.io rupak-roy/nlp](https://share.streamlit.io/rupak-roy/nlp/main/nlp_app.py) ")
+     
     st.text("~ Currently accepting smaller files due to Heroku free storage limit,thus computationally expensive tasks might fail and will restart the app, will be transfered to streamlit platform soon ")
   
     st.text("Ignore:EmptyDataError: No columns to parse from file have no effect on analysis,This is indentation Error will be fixed in next update")
    
-    activities = ["EDA","Plots","Model Building","About"]
+    activities = ["EDA","Plots","Model Building","Deep-Learning","NLP","About"]
     
     choice = st.sidebar.selectbox("Select Activity",activities)
     
@@ -1181,8 +1184,15 @@ def main():
                 st.write(p_results)
        #--------------- THE END---------------------------     
          
-                                
-        
+    elif choice =='Deep-Learning':
+       run_deep_learning()
+    
+    elif choice =="NLP":
+        st.write("Our day to day language can tell you an aboard patterns, insights and sentiments. Explore the power of Ai: Natural Language Processing algorithm and discover synchronicity that leads one to another. Free to use as much as you like! under GNU General Public License with a Motto #WeRiseByLiftingOthers")
+      
+        st.write("NLP Analytics [@share.streamlit.io rupak-roy/nlp](https://share.streamlit.io/rupak-roy/nlp/main/nlp_app.py)")
+       
+       
     elif choice == 'About':
         st.subheader("About")
         st.text("Thank you for your time")
