@@ -1,6 +1,7 @@
 keras
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.0
+tensorflow
 alabaster==0.7.12
 altair==4.1.0
 argh==0.26.2
